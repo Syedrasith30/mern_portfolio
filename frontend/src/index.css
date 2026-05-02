@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --color-neon-blue: #00f3ff;
+  --color-neon-purple: #bd00ff;
+  --color-soft-cyan: #a0f4ff;
+  
+  --color-dark-bg: #0a0f1c; /* Deep navy/black */
+  --color-light-bg: #f1f5f9; /* Soft slate gray */
+  --color-light-gradient-start: #f1f5f9;
+  --color-light-gradient-end: #e2e8f0;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@layer base {
+  body {
+    @apply bg-light-bg text-slate-800 transition-colors duration-300;
+  }
+  
+  .dark body {
+    @apply bg-dark-bg text-slate-200;
+  }
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/40 shadow-lg text-slate-800;
+  }
+  
+  .dark .glass {
+    @apply bg-black/30 backdrop-blur-md border border-white/10 shadow-[0_4px_30px_rgba(0,243,255,0.1)];
+  }
+
+  .neon-text-blue {
+    text-shadow: 0 0 5px theme('colors.neon-blue'), 0 0 10px theme('colors.neon-blue');
+  }
+
+  .neon-text-purple {
+    text-shadow: 0 0 5px theme('colors.neon-purple'), 0 0 10px theme('colors.neon-purple');
+  }
+
+  .glow-border {
+    box-shadow: 0 0 10px theme('colors.neon-blue'), inset 0 0 5px theme('colors.neon-blue');
+  }
+  
+  .dark .glow-border {
+    box-shadow: 0 0 15px theme('colors.neon-blue'), inset 0 0 10px theme('colors.neon-blue');
+  }
+}
+
+/* Custom scrollbar for webkit */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-300 rounded-full;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  @apply bg-slate-700;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-neon-blue/50;
+}
