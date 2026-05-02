@@ -8,16 +8,10 @@ const Academic = require('../models/Academic');
 const Message = require('../models/Message');
 const multer = require('multer');
 const resumeController = require('../controllers/resumeController');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 
-// Email transporter setup
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+// Resend email client
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Configure multer to store files in memory as Buffers
 const upload = multer({
@@ -101,11 +95,11 @@ router.post('/contact', async (req, res) => {
     const newMessage = new Message({ name, email, message });
     const savedMessage = await newMessage.save();
 
-    // 2. Send email notification (non-blocking — won't break form if it fails)
-    const mailOptions = {
-      from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER,
-      replyTo: email,
+    // 2. Send email notification via Resend (non-blocking)
+    resend.emails.send({
+      from: 'Portfolio Contact <onboarding@resend.dev>',
+      to: 'syedrasith1991@gmail.com',
+      reply_to: email,
       subject: `📬 New Message from ${name} | Portfolio`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 24px; border: 1px solid #e0e0e0; border-radius: 12px;">
@@ -127,12 +121,10 @@ router.post('/contact', async (req, res) => {
             </tr>
           </table>
           <hr style="border: none; border-top: 1px solid #eee; margin-top: 16px;" />
-          <p style="color: #aaa; font-size: 12px;">You can reply directly to this email to respond to ${name}.</p>
+          <p style="color: #aaa; font-size: 12px;">Reply directly to this email to respond to ${name}.</p>
         </div>
       `,
-    };
-
-    transporter.sendMail(mailOptions).catch((emailErr) => {
+    }).catch((emailErr) => {
       console.error('Email sending failed (message still saved):', emailErr.message);
     });
 
