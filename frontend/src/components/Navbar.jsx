@@ -98,7 +98,7 @@ const Navbar = () => {
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden absolute top-full left-0 w-full glass mt-2 p-4 flex flex-col gap-4 rounded-b-2xl"
+          className="md:hidden absolute top-full left-0 w-full glass mt-2 p-4 flex flex-col gap-4 rounded-b-2xl pointer-events-auto"
         >
           {navLinks.map((link) => (
             <a
