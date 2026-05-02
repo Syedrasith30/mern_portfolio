@@ -8,6 +8,16 @@ const Academic = require('../models/Academic');
 const Message = require('../models/Message');
 const multer = require('multer');
 const resumeController = require('../controllers/resumeController');
+const nodemailer = require('nodemailer');
+
+// Email transporter setup
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 // Configure multer to store files in memory as Buffers
 const upload = multer({
@@ -85,14 +95,48 @@ router.get('/academics', async (req, res) => {
 // === CONTACT (POST) ===
 router.post('/contact', async (req, res) => {
   try {
-    const newMessage = new Message({
-      name: req.body.name,
-      email: req.body.email,
-      message: req.body.message
-    });
+    const { name, email, message } = req.body;
+
+    // 1. Save message to MongoDB
+    const newMessage = new Message({ name, email, message });
     const savedMessage = await newMessage.save();
+
+    // 2. Send email notification to portfolio owner
+    const mailOptions = {
+      from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
+      to: process.env.EMAIL_USER,
+      replyTo: email,
+      subject: `📬 New Message from ${name} | Portfolio`,
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 24px; border: 1px solid #e0e0e0; border-radius: 12px;">
+          <h2 style="color: #00f3ff; margin-bottom: 4px;">New Portfolio Message</h2>
+          <p style="color: #888; margin-top: 0;">Someone reached out through your portfolio contact form.</p>
+          <hr style="border: none; border-top: 1px solid #eee;" />
+          <table style="width: 100%; margin-top: 16px;">
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold; color: #555; width: 100px;">Name:</td>
+              <td style="padding: 8px 0; color: #222;">${name}</td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold; color: #555;">Email:</td>
+              <td style="padding: 8px 0;"><a href="mailto:${email}" style="color: #00f3ff;">${email}</a></td>
+            </tr>
+            <tr>
+              <td style="padding: 8px 0; font-weight: bold; color: #555; vertical-align: top;">Message:</td>
+              <td style="padding: 8px 0; color: #222; white-space: pre-wrap;">${message}</td>
+            </tr>
+          </table>
+          <hr style="border: none; border-top: 1px solid #eee; margin-top: 16px;" />
+          <p style="color: #aaa; font-size: 12px;">You can reply directly to this email to respond to ${name}.</p>
+        </div>
+      `,
+    };
+
+    await transporter.sendMail(mailOptions);
+
     res.status(201).json(savedMessage);
   } catch (err) {
+    console.error('Contact error:', err);
     res.status(400).json({ message: err.message });
   }
 });
