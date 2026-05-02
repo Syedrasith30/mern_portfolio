@@ -97,11 +97,11 @@ router.post('/contact', async (req, res) => {
   try {
     const { name, email, message } = req.body;
 
-    // 1. Save message to MongoDB
+    // 1. Save message to MongoDB first (always)
     const newMessage = new Message({ name, email, message });
     const savedMessage = await newMessage.save();
 
-    // 2. Send email notification to portfolio owner
+    // 2. Send email notification (non-blocking — won't break form if it fails)
     const mailOptions = {
       from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
@@ -132,8 +132,11 @@ router.post('/contact', async (req, res) => {
       `,
     };
 
-    await transporter.sendMail(mailOptions);
+    transporter.sendMail(mailOptions).catch((emailErr) => {
+      console.error('Email sending failed (message still saved):', emailErr.message);
+    });
 
+    // Respond with success immediately after saving to DB
     res.status(201).json(savedMessage);
   } catch (err) {
     console.error('Contact error:', err);
