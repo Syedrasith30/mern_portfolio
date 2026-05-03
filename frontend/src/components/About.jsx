@@ -23,6 +23,7 @@ const About = () => {
       icon: Code2,
       color: 'text-neon-blue',
       bgHover: 'group-hover:bg-neon-blue/20',
+      scrollColor: '#00f3ff',
       description: 'Crafted highly responsive and interactive user interfaces using modern React, HTML5, CSS3, and Tailwind CSS. Focused on delivering premium aesthetics, smooth micro-animations with Framer Motion, and accessible, mobile-first design patterns.'
     },
     {
@@ -31,6 +32,7 @@ const About = () => {
       icon: Server,
       color: 'text-neon-purple',
       bgHover: 'group-hover:bg-neon-purple/20',
+      scrollColor: '#bd00ff',
       description: 'Built robust server-side logic and RESTful APIs using Node.js and Express. Implemented JWT-based authentication, protected routes, secure data handling, and optimized server architecture for scalability and performance.'
     },
     {
@@ -39,6 +41,7 @@ const About = () => {
       icon: Database,
       color: 'text-soft-cyan',
       bgHover: 'group-hover:bg-soft-cyan/20',
+      scrollColor: '#00ffaa',
       description: 'Designed efficient database schemas using MongoDB and Mongoose. Handled complex queries, data aggregation, and relationship modeling to ensure data integrity and high-speed retrieval for MERN stack applications.'
     },
     {
@@ -47,6 +50,7 @@ const About = () => {
       icon: Terminal,
       color: 'text-neon-blue',
       bgHover: 'group-hover:bg-neon-blue/20',
+      scrollColor: '#00f3ff',
       description: 'Automated repetitive development tasks and workflows using custom scripts, Node.js utilities, and task runners to streamline the build process and improve overall development efficiency.'
     },
     {
@@ -55,6 +59,7 @@ const About = () => {
       icon: GitBranch,
       color: 'text-neon-purple',
       bgHover: 'group-hover:bg-neon-purple/20',
+      scrollColor: '#bd00ff',
       description: 'Managed version control utilizing Git and GitHub. Configured CI/CD pipelines, managed cloud deployments, and integrated third-party services like Cloudinary to ensure reliable staging and production environments.'
     },
     {
@@ -63,6 +68,7 @@ const About = () => {
       icon: Smartphone,
       color: 'text-soft-cyan',
       bgHover: 'group-hover:bg-soft-cyan/20',
+      scrollColor: '#00ffaa',
       description: 'Designed mobile-first web applications ensuring seamless experiences across all screen sizes. Specialized in responsive layouts, touch-friendly interfaces, and Progressive Web App (PWA) standards.'
     }
   ];
@@ -91,7 +97,7 @@ const About = () => {
         </motion.div>
 
         <div className="glass p-8 md:p-12 rounded-3xl grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          {/* Profile Visual */}
+          {/* Profile Visual — Holographic style matching Hero */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -99,16 +105,96 @@ const About = () => {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="lg:col-span-5 flex justify-center"
           >
-            <div className="relative w-64 h-64 md:w-80 md:h-80">
-              <div className="absolute inset-0 bg-gradient-to-tr from-neon-purple to-neon-blue rounded-3xl transform rotate-6 opacity-50 blur-lg"></div>
-              <div className="absolute inset-0 bg-slate-800 rounded-3xl transform -rotate-3 overflow-hidden border border-white/20">
-                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop" alt="Coding Setup" className="w-full h-full object-cover opacity-80 mix-blend-overlay" />
+            <div className="relative w-[280px] h-[340px] md:w-[320px] md:h-[400px] flex items-center justify-center">
+
+              {/* Holographic glow base */}
+              <div className="absolute bottom-0 w-48 h-10 bg-neon-blue/20 rounded-full filter blur-[20px] shadow-[0_0_40px_rgba(0,243,255,0.6)]"></div>
+
+              {/* Orbiting decorative rings */}
+              <div className="absolute inset-x-4 bottom-16 pointer-events-none">
+                <motion.div
+                  animate={{ rotateY: 360 }}
+                  transition={{ repeat: Infinity, duration: 14, ease: 'linear' }}
+                  className="absolute inset-0 h-[220px] rounded-full border border-neon-blue/25 shadow-[0_0_12px_rgba(0,243,255,0.15)]"
+                >
+                  <div className="absolute top-0 left-1/2 w-3 h-3 bg-neon-blue rounded-full shadow-[0_0_8px_#00f3ff]"></div>
+                </motion.div>
+                <motion.div
+                  animate={{ rotateY: -360 }}
+                  transition={{ repeat: Infinity, duration: 18, ease: 'linear' }}
+                  className="absolute -inset-6 h-[280px] rounded-full border border-neon-purple/25 shadow-[0_0_12px_rgba(189,0,255,0.15)]"
+                >
+                  <div className="absolute bottom-0 right-1/2 w-2 h-2 bg-neon-purple rounded-full shadow-[0_0_8px_#bd00ff]"></div>
+                </motion.div>
               </div>
-              
-              <div className="absolute -bottom-6 -right-6 glass p-4 rounded-2xl flex items-center gap-4">
-                <div className="text-4xl font-bold text-neon-blue">10+</div>
-                <div className="text-sm text-slate-700 dark:text-slate-300 font-medium leading-tight">REST APIs<br/>Built</div>
-              </div>
+
+              {/* Main floating photo card */}
+              <motion.div
+                animate={{ y: [-12, 12, -12] }}
+                transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
+                className="relative w-[230px] h-[290px] md:w-[260px] md:h-[330px] rounded-3xl overflow-hidden border-2 border-white/10 glass shadow-[0_0_40px_rgba(0,0,0,0.5)] z-10"
+              >
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-neon-blue/20 opacity-60 z-10 mix-blend-overlay"></div>
+
+                {/* Scanline effect */}
+                <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.2)_50%)] bg-[size:100%_4px] z-20 opacity-25 pointer-events-none"></div>
+
+                <img
+                  src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=1000&auto=format&fit=crop"
+                  alt="Coding Setup"
+                  className="w-full h-full object-cover filter contrast-110 saturate-110 brightness-90 relative z-0"
+                />
+
+                {/* HUD — top left */}
+                <div className="absolute top-4 left-4 z-30">
+                  <div className="flex gap-1 mb-1">
+                    {[1,2,3,4,5].map(i => (
+                      <div key={i} className={`w-1 h-5 ${i < 4 ? 'bg-neon-blue' : 'bg-slate-700'}`}></div>
+                    ))}
+                  </div>
+                  <p className="text-[9px] text-neon-blue font-mono font-bold tracking-widest uppercase">MERN // 100%</p>
+                </div>
+
+                {/* HUD — bottom right */}
+                <div className="absolute bottom-4 right-4 z-30 text-right">
+                  <p className="text-[10px] text-white font-mono font-bold leading-none">SYS.OPT</p>
+                  <p className="text-2xl text-neon-purple font-black leading-tight drop-shadow-[0_0_8px_#bd00ff]">99.9</p>
+                </div>
+              </motion.div>
+
+              {/* Floating card 1 — REST APIs (top left) */}
+              <motion.div
+                animate={{ y: [0, -18, 0], x: [0, 8, 0] }}
+                transition={{ repeat: Infinity, duration: 5, delay: 0.5 }}
+                className="absolute top-6 -left-10 md:-left-14 glass px-4 py-3 rounded-2xl border border-white/20 shadow-2xl z-20 backdrop-blur-xl"
+              >
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider mb-0.5">APIs Built</p>
+                <p className="text-lg font-black text-neon-blue">10+</p>
+                <div className="h-0.5 w-full bg-slate-700 rounded-full mt-1 overflow-hidden">
+                  <div className="h-full bg-neon-blue w-[90%] shadow-[0_0_6px_#00f3ff]"></div>
+                </div>
+              </motion.div>
+
+              {/* Floating card 2 — Projects (bottom right) */}
+              <motion.div
+                animate={{ y: [0, 18, 0], x: [0, -8, 0] }}
+                transition={{ repeat: Infinity, duration: 6, delay: 1 }}
+                className="absolute bottom-20 -right-10 md:-right-14 glass px-4 py-3 rounded-2xl border border-white/20 shadow-2xl z-20 backdrop-blur-xl"
+              >
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 font-bold uppercase tracking-wider mb-0.5">Projects</p>
+                <p className="text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-neon-blue to-neon-purple">3+</p>
+              </motion.div>
+
+              {/* Floating card 3 — Stack badge (bottom left) */}
+              <motion.div
+                animate={{ y: [0, -14, 0] }}
+                transition={{ repeat: Infinity, duration: 4.5, delay: 1.5 }}
+                className="absolute bottom-4 -left-8 md:-left-12 glass px-3 py-2 rounded-xl border border-neon-purple/30 shadow-xl z-20 backdrop-blur-xl"
+              >
+                <p className="text-[10px] text-neon-purple font-bold uppercase tracking-wider">MERN Stack</p>
+              </motion.div>
+
             </div>
           </motion.div>
 
@@ -199,7 +285,19 @@ const About = () => {
               </div>
 
               {/* Card Content Container */}
-              <div className="w-full max-h-[90vh] overflow-y-auto overflow-x-hidden custom-scrollbar bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl glass border border-white/20 dark:border-slate-800 relative">
+              <div
+                className="w-full max-h-[90vh] overflow-y-auto overflow-x-hidden custom-scrollbar dynamic-scroll bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 shadow-2xl glass border border-white/20 dark:border-slate-800 relative"
+                style={{ '--scroll-thumb-color': selectedSkill.scrollColor }}
+              >
+                {/* Dynamic scrollbar colour to match icon */}
+                <style>{`
+                  .dynamic-scroll::-webkit-scrollbar-thumb {
+                    background: ${selectedSkill.scrollColor};
+                    box-shadow: 0 0 8px ${selectedSkill.scrollColor}99;
+                  }
+                  .dynamic-scroll::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+                  .dynamic-scroll::-webkit-scrollbar { width: 6px; }
+                `}</style>
                 
                 <button 
                   onClick={() => setSelectedSkill(null)}

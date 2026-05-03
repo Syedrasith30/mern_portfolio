@@ -50,7 +50,7 @@ const Navbar = () => {
         {/* Logo */}
         <a href="#hero" onClick={(e) => handleScrollTo(e, '#hero')} className="text-2xl font-bold tracking-tighter">
           <span className="bg-clip-text text-transparent bg-gradient-to-r from-neon-blue to-neon-purple">
-            Syed
+            Rasith
           </span>
           <span className="text-slate-800 dark:text-white">.dev</span>
         </a>

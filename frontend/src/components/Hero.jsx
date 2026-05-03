@@ -1,10 +1,21 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, FileText, ArrowRight, Github, Linkedin, Mail } from 'lucide-react';
 import profilePic from '../assets/profile.jpg';
 import { API_URL } from '../services/api';
 
 const Hero = () => {
+  const [showBubble, setShowBubble] = useState(false);
+  const bubbleTimer = useRef(null);
+
+  const handlePhotoClick = () => {
+    setShowBubble(prev => !prev);
+    if (bubbleTimer.current) clearTimeout(bubbleTimer.current);
+    bubbleTimer.current = setTimeout(() => setShowBubble(false), 4000);
+  };
+
+  useEffect(() => () => clearTimeout(bubbleTimer.current), []);
+
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden perspective-2000">
       {/* Hyper-realistic Background Ambient Lights */}
@@ -26,18 +37,51 @@ const Hero = () => {
           className="flex-1 text-center lg:text-left pt-10 lg:pt-0"
         >
           {/* Mobile Profile Photo */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2, type: "spring", bounce: 0.5 }}
-            className="lg:hidden w-48 h-48 mx-auto mb-10 relative"
-          >
-            <div className="absolute inset-0 rounded-full border-t-2 border-r-2 border-neon-blue animate-[spin_4s_linear_infinite]"></div>
-            <div className="absolute inset-2 rounded-full border-b-2 border-l-2 border-neon-purple animate-[spin_3s_linear_infinite_reverse]"></div>
-            <div className="absolute inset-4 rounded-full overflow-hidden bg-slate-900 shadow-[0_0_30px_rgba(0,243,255,0.5)]">
-              <img src={profilePic} alt="Syed Rasith" className="w-full h-full object-cover transform scale-110" />
+          <div className="lg:hidden flex flex-col items-center mb-10">
+            <div className="relative">
+              <motion.div
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.8, delay: 0.2, type: "spring", bounce: 0.5 }}
+                whileTap={{ scale: 0.9 }}
+                onClick={handlePhotoClick}
+                className="w-48 h-48 relative cursor-pointer select-none"
+              >
+                <div className="absolute inset-0 rounded-full border-t-2 border-r-2 border-neon-blue animate-[spin_4s_linear_infinite]"></div>
+                <div className="absolute inset-2 rounded-full border-b-2 border-l-2 border-neon-purple animate-[spin_3s_linear_infinite_reverse]"></div>
+                {/* Click ripple */}
+                <motion.div
+                  initial={false}
+                  animate={showBubble ? { opacity: [0.7, 0], scale: [1, 1.5] } : {}}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-4 rounded-full border-2 border-neon-blue pointer-events-none z-10"
+                />
+                <div className="absolute inset-4 rounded-full overflow-hidden bg-slate-900 shadow-[0_0_30px_rgba(0,243,255,0.5)]">
+                  <img src={profilePic} alt="Syed Rasith" className="w-full h-full object-cover transform scale-110" />
+                </div>
+              </motion.div>
+
+              {/* Speech bubble — appears below the photo on mobile */}
+              <AnimatePresence>
+                {showBubble && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5, y: -10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.5, y: -10 }}
+                    transition={{ type: 'spring', stiffness: 280, damping: 18 }}
+                    className="absolute -bottom-16 left-1/2 -translate-x-1/2 z-40 w-52"
+                  >
+                    <div className="relative bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-sm font-semibold px-4 py-3 rounded-2xl rounded-tl-sm shadow-[0_8px_30px_rgba(0,243,255,0.25)] border border-neon-blue/30 text-center">
+                      👋 Hi welcome,{' '}
+                      <span className="text-neon-blue">Want to connect?</span>{' '}🙂
+                      {/* Tail pointing up toward the photo */}
+                      <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[10px] border-b-white dark:border-b-slate-800" />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-          </motion.div>
+          </div>
 
           {/* Futuristic Name Badge */}
           <motion.div 
@@ -119,6 +163,24 @@ const Hero = () => {
               </a>
             ))}
           </motion.div>
+
+          {/* Mobile-only scroll indicator — flows naturally below social icons */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.5, duration: 1 }}
+            className="lg:hidden flex flex-col items-center gap-3 mt-10"
+          >
+            <div className="w-px h-12 bg-linear-to-b from-transparent via-neon-blue to-transparent relative overflow-hidden">
+              <motion.div
+                animate={{ y: ["-100%", "100%"] }}
+                transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+                className="absolute inset-x-0 top-0 h-1/2 bg-linear-to-b from-transparent to-white shadow-[0_0_10px_#fff]"
+              />
+            </div>
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">Initiate Scroll</span>
+          </motion.div>
+
         </motion.div>
 
         {/* Right Side: Ultra-Realistic Hologram Profile */}
@@ -144,36 +206,69 @@ const Hero = () => {
               </motion.div>
             </div>
 
-            {/* Main Image Container */}
-            <motion.div 
-              animate={{ y: [-15, 15, -15] }} 
-              transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-              className="relative w-[340px] h-[460px] rounded-4xl overflow-hidden border-2 border-white/10 glass shadow-[0_0_50px_rgba(0,0,0,0.5)] z-10"
-            >
-              <div className="absolute inset-0 bg-linear-to-t from-slate-900 via-transparent to-neon-blue/20 opacity-60 z-10 mix-blend-overlay"></div>
-              
-              {/* Scanline effect */}
-              <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.25)_50%)] bg-size-[100%_4px] z-20 opacity-30 pointer-events-none"></div>
-              
-              <img 
-                src={profilePic}
-                alt="Syed Rasith" 
-                className="w-full h-full object-cover filter contrast-125 saturate-110 brightness-90 relative z-0" 
-              />
-              
-              {/* Internal HUD Elements */}
-              <div className="absolute top-6 left-6 z-30">
-                <div className="flex gap-1 mb-1">
-                  {[1,2,3,4,5].map(i => <div key={i} className={`w-1.5 h-6 ${i<4 ? 'bg-neon-blue' : 'bg-slate-700'}`}></div>)}
-                </div>
-                <p className="text-[10px] text-neon-blue font-mono font-bold tracking-widest uppercase">MERN // 100%</p>
-              </div>
+            {/* Main Image Container — clickable */}
+            <div className="relative">
+              <motion.div 
+                animate={{ y: [-15, 15, -15] }} 
+                transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+                whileTap={{ scale: 0.93 }}
+                onClick={handlePhotoClick}
+                className="relative w-[340px] h-[460px] rounded-4xl overflow-hidden border-2 border-white/10 glass shadow-[0_0_50px_rgba(0,0,0,0.5)] z-10 cursor-pointer select-none"
+              >
+                <div className="absolute inset-0 bg-linear-to-t from-slate-900 via-transparent to-neon-blue/20 opacity-60 z-10 mix-blend-overlay"></div>
+                
+                {/* Scanline effect */}
+                <div className="absolute inset-0 bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.25)_50%)] bg-size-[100%_4px] z-20 opacity-30 pointer-events-none"></div>
+                
+                {/* Click ripple hint */}
+                <motion.div
+                  initial={false}
+                  animate={showBubble ? { opacity: [0.6, 0], scale: [1, 2] } : {}}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0 z-30 rounded-4xl border-2 border-neon-blue pointer-events-none"
+                />
 
-              <div className="absolute bottom-6 right-6 z-30 text-right">
-                <p className="text-sm text-white font-mono font-bold leading-none">SYS.OPT</p>
-                <p className="text-3xl text-neon-purple font-black leading-tight drop-shadow-[0_0_10px_#bd00ff]">99.9</p>
-              </div>
-            </motion.div>
+                <img 
+                  src={profilePic}
+                  alt="Syed Rasith" 
+                  className="w-full h-full object-cover filter contrast-125 saturate-110 brightness-90 relative z-0" 
+                />
+                
+                {/* Internal HUD Elements */}
+                <div className="absolute top-6 left-6 z-30">
+                  <div className="flex gap-1 mb-1">
+                    {[1,2,3,4,5].map(i => <div key={i} className={`w-1.5 h-6 ${i<4 ? 'bg-neon-blue' : 'bg-slate-700'}`}></div>)}
+                  </div>
+                  <p className="text-[10px] text-neon-blue font-mono font-bold tracking-widest uppercase">MERN // 100%</p>
+                </div>
+
+                <div className="absolute bottom-6 right-6 z-30 text-right">
+                  <p className="text-sm text-white font-mono font-bold leading-none">SYS.OPT</p>
+                  <p className="text-3xl text-neon-purple font-black leading-tight drop-shadow-[0_0_10px_#bd00ff]">99.9</p>
+                </div>
+              </motion.div>
+
+              {/* Speech Bubble — appears to the right of the photo */}
+              <AnimatePresence>
+                {showBubble && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.5, x: -20 }}
+                    animate={{ opacity: 1, scale: 1, x: 0 }}
+                    exit={{ opacity: 0, scale: 0.5, x: -20 }}
+                    transition={{ type: 'spring', stiffness: 280, damping: 18 }}
+                    className="absolute top-16 -right-56 z-40 w-48"
+                  >
+                    {/* Bubble body */}
+                    <div className="relative bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-sm font-semibold px-4 py-3 rounded-2xl rounded-tl-sm shadow-[0_8px_30px_rgba(0,243,255,0.25)] border border-neon-blue/30">
+                      👋 Hi welcome,{' '}
+                      <span className="text-neon-blue">Want to connect?</span>{' '}🙂
+                      {/* Tail pointing left toward the photo */}
+                      <span className="absolute -left-2.5 top-3 w-0 h-0 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent border-r-[10px] border-r-white dark:border-r-slate-800" />
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Floating UI Cards */}
             <motion.div 
@@ -201,12 +296,12 @@ const Hero = () => {
         </motion.div>
       </div>
 
-      {/* Futuristic Scroll Indicator */}
+      {/* Futuristic Scroll Indicator — desktop only (absolute positioned) */}
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 z-20"
+        className="hidden lg:flex absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-3 z-20"
       >
         <div className="w-px h-16 bg-linear-to-b from-transparent via-neon-blue to-transparent relative overflow-hidden">
           <motion.div 

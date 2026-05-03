@@ -196,20 +196,28 @@ const Projects = () => {
               className="absolute inset-0 bg-slate-900/80 backdrop-blur-md"
             />
             
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto overflow-x-hidden custom-scrollbar glass bg-white dark:bg-slate-900 rounded-3xl z-10 shadow-2xl shadow-neon-blue/20 border border-white/20 dark:border-slate-800"
-            >
-              <div className="absolute top-0 left-0 w-full h-2 bg-linear-to-r from-neon-blue to-neon-purple shadow-[0_0_15px_rgba(0,243,255,0.8)] z-50"></div>
+            {/* Card + bubble wrapper — relative so bubble anchors to card corner */}
+            <div className="relative w-full max-w-5xl z-10">
 
-              <button 
+              {/* Floating close bubble — anchored to top-right corner of the card */}
+              <motion.button
+                initial={{ opacity: 0, scale: 0 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                 onClick={() => setSelectedProject(null)}
-                className="absolute top-6 right-6 z-50 p-3 rounded-full bg-black/40 hover:bg-black/60 text-white backdrop-blur-md transition-all hover:scale-110 border border-white/10"
+                className="absolute -top-5 -right-5 z-[200] w-11 h-11 flex items-center justify-center rounded-full bg-gradient-to-br from-neon-blue to-neon-purple text-white shadow-[0_0_20px_rgba(0,243,255,0.6)] hover:shadow-[0_0_30px_rgba(189,0,255,0.8)] hover:scale-110 transition-all duration-300 border-2 border-white/30 backdrop-blur-md"
               >
-                <X className="w-6 h-6" />
-              </button>
+                <X className="w-5 h-5" />
+              </motion.button>
+
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                className="w-full max-h-[90vh] overflow-y-auto overflow-x-hidden custom-scrollbar glass bg-white dark:bg-slate-900 rounded-3xl shadow-2xl shadow-neon-blue/20 border border-white/20 dark:border-slate-800"
+              >
+                <div className="absolute top-0 left-0 w-full h-2 bg-linear-to-r from-neon-blue to-neon-purple shadow-[0_0_15px_rgba(0,243,255,0.8)] z-50"></div>
 
               <div className="w-full h-72 md:h-96 relative">
                 <div className="absolute inset-0 bg-linear-to-t from-slate-900 via-slate-900/60 to-transparent z-10"></div>
@@ -296,6 +304,7 @@ const Projects = () => {
                 </div>
               </div>
             </motion.div>
+            </div> {/* end card+bubble relative wrapper */}
           </div>
         )}
       </AnimatePresence>

@@ -40,6 +40,7 @@ const Skills = () => {
             { _id: '3', name: 'Node.js & Express', category: 'Backend Technologies', level: 'Intermediate', description: 'Implementing server-side logic and building REST APIs.', toolsUsed: ['Express.js', 'Nodemon', 'JWT'] },
             { _id: '4', name: 'MongoDB, MySQL, SQL', category: 'Databases', level: 'Intermediate', description: 'Database management, CRUD operations, and schema modeling.', toolsUsed: ['Mongoose', 'Atlas'] },
             { _id: '5', name: 'Git, Postman, VS Code', category: 'Tools & Editors', level: 'Advanced', description: 'Version control, API testing, and collaborative development tools.', toolsUsed: ['GitHub', 'Git CLI'] },
+            { _id: '6', name: 'Python Basics', category: 'Languages', level: 'Beginner', description: 'Foundational Python programming including data types, control flow, functions, and introductory scripting.', toolsUsed: ['Python 3', 'pip', 'Jupyter Notebook'] },
           ]);
         } else {
           setSkills(data);
